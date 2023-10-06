@@ -1,10 +1,9 @@
 import { spawnCreep } from "./utils";
 
-import runHarvesterLogic from "./roles/harvester";
-import runUpgraderLogic from "./roles/upgrader";
-import runBuilderLogic from "./roles/builder";
-import runRepairerLogic from "./roles/repairer";
 import Logger from "./logging";
+import { isCreepBusy, tickCreepTask } from "./tasks/call_logic";
+import { expect } from "./jestLikeIfs";
+import { HexColors } from "./enums";
 
 const logger = new Logger("stages");
 
@@ -48,7 +47,8 @@ export function towerControl(): void {
     */
 }
 
-function showCreepNameOverItsHead(creep: Creep) {
+function renderCreepNameOverItsHead(creep: Creep) {
+    if (creep.spawning) return;
     const shortRoleName = creep.memory.role[0].toUpperCase();
     creep.room.visual.text(shortRoleName, creep.pos.x + 1, creep.pos.y, {
         align: "left",
@@ -56,56 +56,66 @@ function showCreepNameOverItsHead(creep: Creep) {
     });
 }
 
-export function getCreepsByTypesAndRunLogic(): CreepsByTypes {
+function renderSpawningName(spawn: StructureSpawn) {
+    spawn.room.visual.text("🛠️" + spawn.spawning.name, spawn.pos.x + 1, spawn.pos.y, {
+        align: "left",
+        opacity: 0.8,
+    });
+}
+
+export function renderUI() {
+    let renderConfig: RenderConfig = Memory.render || {};
+
+    if (!renderConfig.enableRender) return;
+
+    if (renderConfig.enableCreepNames) {
+        for (const name in Game.creeps) {
+            renderCreepNameOverItsHead(Game.creeps[name]);
+        }
+    }
+
+    if (renderConfig.enableSpawningNames) {
+        for (const name in Game.spawns) {
+            renderSpawningName(Game.spawns[name]);
+        }
+    }
+}
+
+export function getCreepsByTypes(): CreepsByTypes {
     const creepsByTypes: { [creepType in CreepType]: Creep[] } = {
         harvester: [],
         upgrader: [],
         builder: [],
         repairer: [],
     };
-    for (const creep of Object.values(Game.creeps)) {
-        creepsByTypes[creep.memory.role].push(creep);
-        showCreepNameOverItsHead(creep);
-        switch (creep.memory.role) {
-            case "harvester":
-                runHarvesterLogic(creep);
-                break;
-            case "upgrader":
-                runUpgraderLogic(creep as UpgraderCreep);
-                break;
-            case "builder":
-                runBuilderLogic(creep as BuilderCreep);
-                break;
-            case "repairer":
-                runRepairerLogic(creep as RepairerCreep);
-                break;
-        }
-    }
 
     return creepsByTypes;
+}
+
+export function runCreepsTasks(): void {
+    for (const name in Game.creeps) {
+        const creep = Game.creeps[name];
+        tickCreepTask(creep);
+
+        if (!isCreepBusy)
+            if (Game.flags.AFK !== undefined)
+                expect(
+                    creep.moveTo(Game.flags.AFK, {
+                        visualizePathStyle: { stroke: HexColors.red },
+                    }),
+                ).in([OK, ERR_BUSY, ERR_TIRED]);
+    }
 }
 
 export function keepPopulation(creepsByTypes: CreepsByTypes) {
     let isSpawned = false;
     if (creepsByTypes.harvester.length < 3) {
         isSpawned = spawnCreep("harvester") === OK;
-    } else if (creepsByTypes.repairer.length < 1) {
+    } else if (creepsByTypes.repairer.length < 2) {
         isSpawned = spawnCreep("repairer") === OK;
-    } else if (creepsByTypes.upgrader.length < 10) {
+    } else if (creepsByTypes.upgrader.length < 2) {
         isSpawned = spawnCreep("upgrader") === OK;
-    } else if (creepsByTypes.builder.length < 1) {
+    } else if (creepsByTypes.builder.length < 4) {
         isSpawned = spawnCreep("builder") === OK;
-    }
-
-    const spawning = Game.spawns["Spawn1"].spawning;
-    if (spawning !== null) {
-        const spawningCreep = Game.creeps[spawning.name];
-        Game.spawns["Spawn1"].room.visual.text(
-            "Spawning " + spawningCreep.memory.role,
-            Game.spawns["Spawn1"].pos.x + 1,
-            Game.spawns["Spawn1"].pos.y,
-            { align: "left", opacity: 0.8 },
-        );
-        if (isSpawned) logger.info("Spawning new creep: " + spawningCreep);
     }
 }

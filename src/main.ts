@@ -1,9 +1,10 @@
-import { clearDeadBodies, towerControl, getCreepsByTypesAndRunLogic, keepPopulation } from "./stages";
+import { clearDeadBodies, towerControl, getCreepsByTypes, keepPopulation, renderUI, runCreepsTasks } from "./stages";
 import Logger, { setLogLevel } from "./logging";
+import { ErrorMapper } from "./errorMapper";
 
 const logger = new Logger("main");
 
-export function loop(): void {
+function main(): void {
     setLogLevel("DEBUG");
     logger.debug(`Tick ${Game.time}`);
 
@@ -11,6 +12,10 @@ export function loop(): void {
         clearDeadBodies();
     }
     towerControl();
-    const creepsByTypes = getCreepsByTypesAndRunLogic();
+    const creepsByTypes = getCreepsByTypes();
     keepPopulation(creepsByTypes);
+    runCreepsTasks();
+    renderUI();
 }
+
+exports.loop = ErrorMapper.wrapLoop(main);

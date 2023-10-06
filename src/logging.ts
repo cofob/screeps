@@ -14,6 +14,10 @@ export class Logger {
         return `[${this.name}] [${level}] ${message}`;
     }
 
+    sub(name: string): Logger {
+        return new Logger(this.name + "." + name);
+    }
+
     log(level: LogLevelStrings, message: string): void {
         let enum_level = LogLevel[level];
         if (enum_level < this.level) return;

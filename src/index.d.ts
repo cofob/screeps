@@ -1,37 +1,30 @@
 import { LogLevel } from "./enums";
 
 declare global {
+    type FINISHED = -101;
+    type ERR_BODY_PARTS_MISMATCH = -102;
+    const FINISHED: FINISHED;
+    const ERR_BODY_PARTS_MISMATCH: ERR_BODY_PARTS_MISMATCH;
+
     type CreepType = "harvester" | "upgrader" | "builder" | "repairer";
     type LogLevelStrings = keyof typeof LogLevel;
+
+    interface RenderConfig {
+        enableRender?: boolean;
+        enableCreepNames?: boolean;
+        enableSpawningNames?: boolean;
+    }
 
     interface Memory {
         maxHp?: number;
         logLevel?: LogLevelStrings;
+        enableRuinsHarvesting?: true;
+        render?: RenderConfig;
     }
 
     interface CreepMemory {
         role: CreepType;
-    }
-
-    interface BuilderCreep extends Creep {
-        memory: CreepMemory & {
-            role: "builder";
-            building: boolean;
-        };
-    }
-
-    interface RepairerCreep extends Creep {
-        memory: CreepMemory & {
-            role: "repairer";
-            repairing: boolean;
-        };
-    }
-
-    interface UpgraderCreep extends Creep {
-        memory: CreepMemory & {
-            role: "upgrader";
-            upgrading: boolean;
-        };
+        task?: any;
     }
 }
 
