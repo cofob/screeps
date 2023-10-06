@@ -6,9 +6,8 @@ export enum LogLevel {
     FATAL,
 }
 
-export enum CreepRole {
-    harvester = "harvester",
-    upgrader = "upgrader",
-    builder = "builder",
-    repairer = "repairer",
+export enum HexColors {
+    white = "#ffffff",
+    orange = "#ffaa00",
+    red = "#ffa07a",
 }
