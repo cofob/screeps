@@ -6,7 +6,6 @@ const logger = new Logger("main");
 
 function main() {
     setLogLevel("DEBUG");
-    logger.debug(`Deployed from GitHub!`);
 
     if (Game.time % 60 === 0) {
         for (let name in Memory.creeps) {
