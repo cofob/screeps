@@ -7,11 +7,11 @@ My code for [screeps.com](https://screeps.com/) game.
 1. Install dependencies
 
     ```bash
-    yarn
+    pnpm i
     ```
 
 2. Build project:
 
     ```bash
-    yarn build
+    pnpm build
     ```

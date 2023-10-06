@@ -1,33 +1,38 @@
-import { CreepRole, LogLevel } from "./enums";
+import { LogLevel } from "./enums";
 
 declare global {
-    interface CreepWorker {
-        run(creep: Creep): void;
-    }
+    type CreepType = "harvester" | "upgrader" | "builder" | "repairer";
+    type LogLevelStrings = keyof typeof LogLevel;
 
-    interface CreepSpawn {
-        body: BodyPartConstant[];
-        name: string;
-        opts?: SpawnOptions;
-        getCreepName(): string;
-        worker: CreepWorker;
-        ui_name?: string;
+    interface Memory {
+        maxHp?: number;
+        logLevel?: LogLevelStrings;
     }
 
     interface CreepMemory {
-        role?: CreepRole;
-
-        upgrading?: boolean;
-        repairing?: boolean;
-        building?: boolean;
+        role: CreepType;
     }
 
-    interface Memory {
-        MaxHp?: number;
-        logLevel?: string;
+    interface BuilderCreep extends Creep {
+        memory: CreepMemory & {
+            role: "builder";
+            building: boolean;
+        };
     }
 
-    type LogLevelStrings = keyof typeof LogLevel;
+    interface RepairerCreep extends Creep {
+        memory: CreepMemory & {
+            role: "repairer";
+            repairing: boolean;
+        };
+    }
+
+    interface UpgraderCreep extends Creep {
+        memory: CreepMemory & {
+            role: "upgrader";
+            upgrading: boolean;
+        };
+    }
 }
 
 export {};
