@@ -17,10 +17,10 @@ jobs:
               uses: actions/setup-node@v3
               with:
                   node-version: "18"
-                  cache: "yarn"
+                  cache: "pnpm"
 
             - name: Install dependencies
-              run: yarn
+              run: pnpm i
 
             - name: Load credentials
               run: echo '${{ secrets.SCREEPS_CREDENTIALS }}' > screeps.json
@@ -28,9 +28,9 @@ jobs:
             - name: Build and deploy to dev
               if: github.ref == 'refs/heads/dev'
               run: |
-                  yarn push-dev
+                  pnpm push-dev
 
             - name: Build and deploy to main
               if: github.ref == 'refs/heads/master'
               run: |
-                  yarn push-main
+                  pnpm push-main
