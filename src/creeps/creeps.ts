@@ -1,6 +1,6 @@
 import { CreepRole } from "$src/enums";
 import Logger from "$src/logging";
-import { BuilderRole, HarvesterRole, RepairerRole, UpgraderRole } from "./roles";
+import { BuilderRole, HarvesterRole, RepairerRole, UpgraderRole } from "./roles/index";
 
 const logger = new Logger("creeps.creeps");
 
@@ -14,6 +14,7 @@ export const HarvesterCreep: CreepSpawn = {
     opts: { memory: { role: CreepRole.harvester } },
     getCreepName: () => formatCreepName("Harvester"),
     worker: new HarvesterRole(),
+    ui_name: "H"
 };
 
 export const UpgraderCreep: CreepSpawn = {
@@ -22,6 +23,7 @@ export const UpgraderCreep: CreepSpawn = {
     opts: { memory: { role: CreepRole.upgrader } },
     getCreepName: () => formatCreepName("Upgrader"),
     worker: new UpgraderRole(),
+    ui_name: "U"
 };
 
 export const BuilderCreep: CreepSpawn = {
@@ -30,6 +32,7 @@ export const BuilderCreep: CreepSpawn = {
     opts: { memory: { role: CreepRole.builder } },
     getCreepName: () => formatCreepName("Builder"),
     worker: new BuilderRole(),
+    ui_name: "B",
 };
 
 export const RepairerCreep: CreepSpawn = {
@@ -38,6 +41,7 @@ export const RepairerCreep: CreepSpawn = {
     opts: { memory: { role: CreepRole.repairer } },
     getCreepName: () => formatCreepName("Repairer"),
     worker: new RepairerRole(),
+    ui_name: "R"
 };
 
 export const roleToCreep = {

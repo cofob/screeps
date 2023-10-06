@@ -6,6 +6,7 @@ const logger = new Logger("main");
 
 function main() {
     setLogLevel("DEBUG");
+    logger.debug(`Tick ${Game.time}`)
 
     if (Game.time % 60 === 0) {
         for (let name in Memory.creeps) {
@@ -31,19 +32,14 @@ function main() {
 
     // Creep spawning
     // Check if there is a not-spawning spawn
-    let spawns = _.filter(Game.spawns, function (spawn) {
-        return !spawn.spawning;
-    });
-    if (spawns.length > 0) {
-        if (harvesters.length < 4) {
-            spawnCreep("Spawn1", HarvesterCreep);
-        } else if (upgraders.length < 2) {
-            spawnCreep("Spawn1", UpgraderCreep);
-        } else if (builders.length < 2) {
-            spawnCreep("Spawn1", BuilderCreep);
-        } else if (repairers.length < 1) {
-            spawnCreep("Spawn1", RepairerCreep);
-        }
+    if (harvesters.length < 4) {
+        spawnCreep("Spawn1", HarvesterCreep);
+    } else if (upgraders.length < 2) {
+        spawnCreep("Spawn1", UpgraderCreep);
+    } else if (builders.length < 2) {
+        spawnCreep("Spawn1", BuilderCreep);
+    } else if (repairers.length < 1) {
+        spawnCreep("Spawn1", RepairerCreep);
     }
 
     // Spawns
@@ -63,7 +59,12 @@ function main() {
     // Creeps
     for (let name in Game.creeps) {
         let creep = Game.creeps[name];
-        roleToCreep[creep.memory.role].worker.run(creep);
+        let role = roleToCreep[creep.memory.role];
+        creep.room.visual.text(role.ui_name || creep.memory.role, creep.pos.x + 1, creep.pos.y, {
+            align: "left",
+            opacity: 0.8,
+        });
+        role.worker.run(creep);
     }
 
     // Structures

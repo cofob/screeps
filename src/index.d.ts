@@ -11,6 +11,7 @@ declare global {
         opts?: SpawnOptions;
         getCreepName(): string;
         worker: CreepWorker;
+        ui_name?: string;
     }
 
     interface CreepMemory {
