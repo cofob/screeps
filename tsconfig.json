@@ -1,18 +1,13 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
-    "target": "es2018",
-    "sourceMap": true,
-    "paths": {
-      "$src/*": [
-        "./src/*"
-      ]
-    },
-    "experimentalDecorators": true,
-    "allowUnreachableCode": false
-  }
+    "compilerOptions": {
+        "module": "ESNext",
+        "lib": ["ESNext", "DOM"],
+        "target": "es2018",
+        "sourceMap": true,
+        "paths": {
+            "$src/*": ["./src/*"]
+        },
+        "experimentalDecorators": true,
+        "allowUnreachableCode": false
+    }
 }
