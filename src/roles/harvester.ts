@@ -22,17 +22,13 @@ class HarvestingLogic {
         const drop = this.creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
         if (drop === null) return false;
 
-        const pickupAnswer = expect(this.creep.pickup(drop)).in([
-            OK,
-            ERR_BUSY,
-            ERR_NOT_IN_RANGE,
-        ]);
+        const pickupAnswer = expect(this.creep.pickup(drop)).in([OK, ERR_BUSY, ERR_NOT_IN_RANGE]);
 
         if (pickupAnswer === ERR_NOT_IN_RANGE) {
             expect(
                 this.creep.moveTo(drop, {
                     visualizePathStyle: { stroke: HexColors.orange },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED]);
         }
         return true;
@@ -62,15 +58,12 @@ class HarvestingLogic {
         const sources = this.creep.pos.findClosestByPath(FIND_SOURCES);
         if (sources === null) return; // no path?; probably temparary
 
-        const harvestAnswer = expect(this.creep.harvest(sources)).in([
-            OK,
-            ERR_NOT_IN_RANGE,
-        ]);
+        const harvestAnswer = expect(this.creep.harvest(sources)).in([OK, ERR_NOT_IN_RANGE]);
         if (harvestAnswer === ERR_NOT_IN_RANGE) {
             expect(
                 this.creep.moveTo(sources, {
                     visualizePathStyle: { stroke: HexColors.orange },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED]);
         }
     }
@@ -83,11 +76,7 @@ class TransferingEnergyLogic {
     }
 
     public transfer(): void {
-        for (const structureType of [
-            STRUCTURE_TOWER,
-            STRUCTURE_SPAWN,
-            STRUCTURE_EXTENSION,
-        ]) {
+        for (const structureType of [STRUCTURE_TOWER, STRUCTURE_SPAWN, STRUCTURE_EXTENSION]) {
             const targets = this.findStructures(structureType);
 
             if (targets.length === 0) continue;
@@ -97,29 +86,28 @@ class TransferingEnergyLogic {
         }
     }
 
-    private findStructures(
-        structureType: STRUCTURE_TOWER | STRUCTURE_SPAWN | STRUCTURE_EXTENSION
-    ): AnyStructure[] {
+    private findStructures(structureType: STRUCTURE_TOWER | STRUCTURE_SPAWN | STRUCTURE_EXTENSION): AnyStructure[] {
         return this.creep.room.find(FIND_STRUCTURES, {
-            filter: (structure) => {
+            filter: structure => {
                 return (
-                    structure.structureType === structureType &&
-                    structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
+                    structure.structureType === structureType && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0
                 );
             },
         });
     }
 
     private transferEnergyTo(target: AnyStructure): void {
-        const transferResult = expect(
-            this.creep.transfer(target, RESOURCE_ENERGY)
-        ).in([OK, ERR_NOT_IN_RANGE, ERR_NO_PATH]);
+        const transferResult = expect(this.creep.transfer(target, RESOURCE_ENERGY)).in([
+            OK,
+            ERR_NOT_IN_RANGE,
+            ERR_NO_PATH,
+        ]);
 
         if (transferResult == ERR_NOT_IN_RANGE) {
             expect(
                 this.creep.moveTo(target, {
                     visualizePathStyle: { stroke: HexColors.white },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED]);
         }
     }

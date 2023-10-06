@@ -104,7 +104,7 @@ export function keepPopulation(creepsByTypes: CreepsByTypes) {
             "Spawning " + spawningCreep.memory.role,
             Game.spawns["Spawn1"].pos.x + 1,
             Game.spawns["Spawn1"].pos.y,
-            { align: "left", opacity: 0.8 }
+            { align: "left", opacity: 0.8 },
         );
         if (isSpawned) logger.info("Spawning new creep: " + spawningCreep);
     }

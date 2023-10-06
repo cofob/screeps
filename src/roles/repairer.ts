@@ -16,22 +16,19 @@ export default function runRepairerLogic(creep: RepairerCreep): void {
         const sources = creep.pos.findClosestByPath(FIND_SOURCES);
         if (sources === null) return; // not found; probably temparary
 
-        const harvestingResult = expect(creep.harvest(sources)).in([
-            OK,
-            ERR_NOT_IN_RANGE,
-        ]);
+        const harvestingResult = expect(creep.harvest(sources)).in([OK, ERR_NOT_IN_RANGE]);
         if (harvestingResult === ERR_NOT_IN_RANGE) {
             expect(
                 creep.moveTo(sources, {
                     visualizePathStyle: { stroke: HexColors.orange },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED]);
         }
         return;
     }
 
     const targets = creep.room.find(FIND_STRUCTURES, {
-        filter: (structure) => {
+        filter: structure => {
             return (
                 (structure.structureType === STRUCTURE_WALL ||
                     structure.structureType === STRUCTURE_ROAD ||
@@ -45,22 +42,19 @@ export default function runRepairerLogic(creep: RepairerCreep): void {
     });
 
     if (targets.length > 0) {
-        const repairResult = expect(creep.repair(targets[0])).in([
-            OK,
-            ERR_NOT_IN_RANGE,
-        ]);
+        const repairResult = expect(creep.repair(targets[0])).in([OK, ERR_NOT_IN_RANGE]);
         if (repairResult === ERR_NOT_IN_RANGE) {
             expect(
                 creep.moveTo(targets[0], {
                     visualizePathStyle: { stroke: HexColors.white },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED, ERR_NO_PATH]);
         }
     } else {
         expect(
             creep.moveTo(Game.flags.AFK, {
                 visualizePathStyle: { stroke: HexColors.red },
-            })
+            }),
         ).in([OK, ERR_BUSY, ERR_TIRED]);
 
         if (Memory.maxHp < 300000000) {

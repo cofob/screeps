@@ -8,9 +8,9 @@ export function loop(): void {
     logger.debug(`Tick ${Game.time}`);
 
     if (Game.time % 60 === 0) {
-        clearDeadBodies()
+        clearDeadBodies();
     }
-    towerControl()
-    const creepsByTypes = getCreepsByTypesAndRunLogic()
-    keepPopulation(creepsByTypes)
+    towerControl();
+    const creepsByTypes = getCreepsByTypesAndRunLogic();
+    keepPopulation(creepsByTypes);
 }

@@ -12,29 +12,23 @@ export default function runUpgraderLogic(creep: UpgraderCreep): void {
         const sources = creep.pos.findClosestByPath(FIND_SOURCES);
         if (sources === null) return; // not found; probably temparary
 
-        const harvestingResult = expect(creep.harvest(sources)).in([
-            OK,
-            ERR_BUSY,
-            ERR_NOT_IN_RANGE,
-        ]);
+        const harvestingResult = expect(creep.harvest(sources)).in([OK, ERR_BUSY, ERR_NOT_IN_RANGE]);
         if (harvestingResult === ERR_NOT_IN_RANGE) {
             expect(
                 creep.moveTo(sources, {
                     visualizePathStyle: { stroke: HexColors.orange },
-                })
+                }),
             ).in([OK, ERR_BUSY, ERR_TIRED]);
         }
         return;
     }
 
-    const upgradeResult = expect(
-        creep.upgradeController(creep.room.controller)
-    ).in([OK, ERR_NOT_IN_RANGE]);
+    const upgradeResult = expect(creep.upgradeController(creep.room.controller)).in([OK, ERR_NOT_IN_RANGE]);
     if (upgradeResult === ERR_NOT_IN_RANGE) {
         expect(
             creep.moveTo(creep.room.controller, {
                 visualizePathStyle: { stroke: HexColors.white },
-            })
+            }),
         ).in([OK, ERR_BUSY, ERR_TIRED]);
     }
 }
