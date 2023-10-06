@@ -54,7 +54,7 @@ export default function runRepairerLogic(creep: RepairerCreep): void {
                 creep.moveTo(targets[0], {
                     visualizePathStyle: { stroke: HexColors.white },
                 })
-            ).in([OK, ERR_BUSY, ERR_TIRED]);
+            ).in([OK, ERR_BUSY, ERR_TIRED, ERR_NO_PATH]);
         }
     } else {
         expect(
