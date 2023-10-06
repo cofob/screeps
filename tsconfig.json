@@ -1,8 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "module": "esnext",
+    "lib": ["es2018"],
+    "target": "es2018",
+    "sourceMap": true,
     "paths": {
       "$src/*": ["./src/*"]
-    }
+    },
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false
   }
 }
