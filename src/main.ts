@@ -5,7 +5,6 @@ import { ErrorMapper } from "./errorMapper";
 const logger = new Logger("main");
 
 function main(): void {
-    setLogLevel("DEBUG");
     logger.debug(`Tick ${Game.time}`);
 
     if (Game.time % 60 === 0) {
