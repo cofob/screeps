@@ -3,7 +3,7 @@ name: "Deploy to Screeps.com"
 
 on:
     push:
-        branches: [master]
+        branches: [master, dev]
 
 jobs:
     deploy:
@@ -25,5 +25,12 @@ jobs:
             - name: Load credentials
               run: echo '${{ secrets.SCREEPS_CREDENTIALS }}' > screeps.json
 
-            - name: Build and deploy
-              run: yarn push-main
+            - name: Build and deploy to dev
+              if: github.ref == 'refs/heads/dev'
+              run: |
+                  yarn push-dev
+
+            - name: Build and deploy to main
+              if: github.ref == 'refs/heads/master'
+              run: |
+                  yarn push-main
