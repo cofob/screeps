@@ -1,3 +1,5 @@
+> **Archival notice:** This repository is archived and no longer maintained.
+
 # Screeps: World
 
 My code for [screeps.com](https://screeps.com/) game.
